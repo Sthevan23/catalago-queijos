@@ -5,12 +5,12 @@
     --stroke: #F2E6D8;
     --text-primary: #3B2B20;
     --text-secondary: #7D6651;
-    --font-title: 'Gaegu', cursive;
+    --font-title: 'Poppins', sans-serif; /* Nova fonte para títulos */
     --font-body: 'Roboto', sans-serif;
-    --h1: 700 26px/135% var(--font-title);
-    --h2: 600 16px/140% var(--font-title);
-    --text: 400 14px/140% var(--font-body);
-    --text-sm: 400 13px/150% var(--font-body);
+    --h1: 700 24px/135% var(--font-title); /* Mantido reduzido */
+    --h2: 600 14px/140% var(--font-title); /* Mantido reduzido */
+    --text: 400 12px/140% var(--font-body); /* Mantido reduzido */
+    --text-sm: 500 14px/150% var(--font-body); /* Mantido reduzido */
 }
 
 * {
@@ -118,7 +118,7 @@ header p {
 }
 
 .item .price {
-    font: 700 16px/1.4 var(--font-body);
+    font: 700 14px/1.4 var(--font-body); /* Reduzido de 16px */
     color: var(--brand-light);
 }
 
@@ -132,10 +132,10 @@ header p {
     background: var(--brand-dark);
     color: #fff;
     border: none;
-    width: 28px;
-    height: 28px;
+    width: 32px; /* Reduzido de 38px */
+    height: 32px; /* Reduzido de 38px */
     border-radius: 6px;
-    font-size: 18px;
+    font-size: 16px; /* Reduzido de 18px */
     cursor: pointer;
     transition: background .2s, transform .2s;
 }
@@ -208,20 +208,9 @@ header p {
     border-radius: 8px;
 }
 
-.itens-salaminhos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Ajuste para responsividade */
-    gap: 10px;
-}
-
-/* Removi a regra redundante, pois não há múltiplas seções .itens-salaminhos */
-.itens-salaminhos + .itens-salaminhos {
-    margin-top: 20px;
-}
-
 @keyframes fadeIn {
-    from {opacity:0; transform:translateY(20px);}
-    to {opacity:1; transform:translateY(0);}
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .cart-header, .cart-footer {
@@ -335,20 +324,20 @@ footer {
 
 @media (max-width: 480px) {
     header h1 {
-        font-size: 20px;
+        font-size: 16px; /* Ajustado para boa visualização */
     }
 
     .item img {
-        height: 100px;
+        height: 80px; /* Reduzido para proporção */
     }
 
     .btn-add, .btn-remove {
-        width: 24px;
-        height: 24px;
-        font-size: 16px;
+        width: 24px; /* Reduzido para celular tava20*/
+        height: 24px; /* Reduzido para celular */
+        font-size: 14px; /* Reduzido para legibilidade tava 14*/
     }
 
     .item-total {
-        min-width: 72px;
+        min-width: 60px; /* Ajustado para celular */
     }
 }
