@@ -72,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   openCartBtn.addEventListener('click', openCart);
   closeCartBtn.addEventListener('click', closeCart);
-  cartModalBackdrop.addEventListener('click', (e) => e.target === cartModalBackdrop && closeCart());
   clearCartBtn.addEventListener('click', clearCart);
   checkoutBtn.addEventListener('click', finalizeOrder);
   checkoutBtnModal.addEventListener('click', finalizeOrder);
