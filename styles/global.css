@@ -379,11 +379,15 @@ footer {
         font-size: 11px;
     }
 
+    .btn-group {
+        gap: 16px; /* Aumentado o espaçamento entre os botões */
+    }
+
     .btn-add,
     .btn-remove {
-        width: 28px;
-        height: 28px;
-        font-size: 14px;
+        width: 36px; /* Aumentado o tamanho dos botões */
+        height: 36px; /* Aumentado o tamanho dos botões */
+        font-size: 18px; /* Aumentado o tamanho da fonte */
         transition: background 0.2s;
     }
 
