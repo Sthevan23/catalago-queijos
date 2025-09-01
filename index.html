@@ -17,6 +17,7 @@
             <p>Descubra os melhores queijos artesanais da região!</p>
         </header>
         <main class="catalogo">
+            <!-- Seção de Queijos Tradicionais -->
             <section class="secao-queijos">
                 <h2 class="secao-titulo">Queijos Tradicionais</h2>
                 <div class="itens-grid">
@@ -42,6 +43,7 @@
                             <button class="btn-add">+</button>
                         </div>
                     </article>
+                    <!-- Demais itens de Queijos Tradicionais (mantidos iguais ao código original) -->
                     <article class="item" data-id="2">
                         <img src="assets/imagens/tradicionais/foto3.png" alt="Queijo Nozinho 450g tradicional">
                         <h2>QUEIJO NOZINHO</h2>
@@ -232,6 +234,7 @@
                 </div>
             </section>
             <hr class="secao-divisor">
+            <!-- Seção de Queijos Trufados -->
             <section class="secao-especiais">
                 <h2 class="secao-titulo">Queijos Trufados</h2>
                 <div class="itens-grid">
@@ -246,6 +249,7 @@
                             <button class="btn-add">+</button>
                         </div>
                     </article>
+                    <!-- Demais itens de Queijos Trufados (mantidos iguais ao código original) -->
                     <article class="item" data-id="30">
                         <img src="assets/imagens/trufados/trufado2.png" alt="Queijo Recheado com Requeijão e Tomate Seco 500g">
                         <h2>QUEIJO RECHEADO COM REQUEIJÃO E TOMATE SECO</h2>
@@ -337,6 +341,7 @@
                 </div>
             </section>
             <hr class="secao-divisor">
+            <!-- Seção de Queijos Finos -->
             <section class="secao-finos">
                 <h2 class="secao-titulo">Queijos Finos</h2>
                 <div class="itens-grid">
@@ -351,6 +356,7 @@
                             <button class="btn-add">+</button>
                         </div>
                     </article>
+                    <!-- Demais itens de Queijos Finos (mantidos iguais ao código original) -->
                     <article class="item" data-id="39">
                         <img src="assets/imagens/queijos_finos/foto2.png" alt="Queijo Parmesão Cunha 400g">
                         <h2>QUEIJO PARMESÃO CUNHA</h2>
@@ -541,6 +547,7 @@
                 </div>
             </section>
             <hr class="secao-divisor">
+            <!-- Seção de Especiarias -->
             <section class="secao-especiarias">
                 <h2 class="secao-titulo">Especiarias</h2>
                 <div class="itens-grid">
@@ -591,6 +598,7 @@
                 </div>
             </section>
             <hr class="secao-divisor">
+            <!-- Seção de Desidratados -->
             <section class="secao-chips">
                 <h2 class="secao-titulo">Desidratados</h2>
                 <div class="itens-grid">
@@ -652,11 +660,12 @@
                 </div>
             </section>
             <hr class="secao-divisor">
+            <!-- Seção de Salaminhos -->
             <section class="secao-salaminhos">
                 <h2 class="secao-titulo">Salaminhos</h2>
                 <div class="itens-grid">
                     <article class="item" data-id="60">
-                        <img src="assets/imagens/salaminhos/foto1.png" alt="Lombo Nobre Defumado com Pimenta B biquinho 200g">
+                        <img src="assets/imagens/salaminhos/foto1.png" alt="Lombo Nobre Defumado com Pimenta Biquinho 200g">
                         <h2>LOMBO NOBRE DEFUMADO C/ PIMENTA BIQUINHO</h2>
                         <p class="details">200g – Defumado artesanal, toque suave da pimenta biquinho</p>
                         <p class="price">R$ 24,90</p>
@@ -756,28 +765,10 @@
             <strong>Sacola:</strong> <span id="cartCount">0</span> itens | <strong>Total:</strong> <span id="cartTotal">R$ 0,00</span>
         </div>
         <div class="cart-actions">
-            <button id="openCart" class="btn-secondary">Ver sacola</button>
+            <a href="sacola.html" class="btn-secondary">Ver sacola</a>
             <button id="checkoutBtn" class="btn-primary" disabled>Finalizar pedido</button>
         </div>
     </aside>
-    <!-- Modal da sacola -->
-    <div class="cart-modal-backdrop hidden" id="cartModalBackdrop" aria-hidden="true">
-        <div class="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
-            <header class="cart-header">
-                <h3 id="cartTitle">Sua Sacola</h3>
-                <button id="closeCart" class="btn-secondary">Fechar</button>
-            </header>
-            <div id="cartEmpty">Sua sacola está vazia.</div>
-            <div class="cart-items hidden" id="cartItems"></div>
-            <footer class="cart-footer">
-                <div><strong>Total do pedido:</strong> <span id="cartTotalModal">R$ 0,00</span></div>
-                <div class="cart-actions">
-                    <button id="clearCart" class="btn-secondary">Esvaziar sacola</button>
-                    <button id="checkoutBtnModal" class="btn-primary" disabled>Finalizar pedido</button>
-                </div>
-            </footer>
-        </div>
-    </div>
     <script src="script.js"></script>
 </body>
 </html>

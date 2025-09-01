@@ -37,45 +37,55 @@ const loadCartFromLocalStorage = () => {
 
 const cart = new Map();
 
+// Elementos DOM
 let itemsNodeList;
 let cartCountEl, cartTotalEl, cartTotalModalEl, cartItemsEl, cartEmptyEl;
-let cartModalBackdrop, openCartBtn, closeCartBtn, checkoutBtn, checkoutBtnModal, clearCartBtn;
+let checkoutBtn, checkoutBtnModal, clearCartBtn;
 
 // ============================
 // INICIALIZAÇÃO
 // ============================
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Carregar o carrinho do localStorage
   loadCartFromLocalStorage();
 
+  // Seletores comuns às duas páginas
   itemsNodeList = document.querySelectorAll('.item');
   cartCountEl = document.getElementById('cartCount');
   cartTotalEl = document.getElementById('cartTotal');
   cartTotalModalEl = document.getElementById('cartTotalModal');
   cartItemsEl = document.getElementById('cartItems');
   cartEmptyEl = document.getElementById('cartEmpty');
-  cartModalBackdrop = document.getElementById('cartModalBackdrop');
-  openCartBtn = document.getElementById('openCart');
-  closeCartBtn = document.getElementById('closeCart');
   checkoutBtn = document.getElementById('checkoutBtn');
   checkoutBtnModal = document.getElementById('checkoutBtnModal');
   clearCartBtn = document.getElementById('clearCart');
 
-  itemsNodeList.forEach((itemEl) => {
-    const btnAdd = itemEl.querySelector('.btn-add');
-    const btnRemove = itemEl.querySelector('.btn-remove');
-    const quantitySpan = itemEl.querySelector('.quantity');
+  // Adicionar eventos aos botões de adicionar/remover em index.html
+  if (itemsNodeList.length > 0) {
+    itemsNodeList.forEach((itemEl) => {
+      const btnAdd = itemEl.querySelector('.btn-add');
+      const btnRemove = itemEl.querySelector('.btn-remove');
+      const quantitySpan = itemEl.querySelector('.quantity');
 
-    btnAdd.addEventListener('click', () => handleQtyChange(itemEl, 1, quantitySpan));
-    btnRemove.addEventListener('click', () => handleQtyChange(itemEl, -1, quantitySpan));
-  });
+      btnAdd.addEventListener('click', () => handleQtyChange(itemEl, 1, quantitySpan));
+      btnRemove.addEventListener('click', () => handleQtyChange(itemEl, -1, quantitySpan));
+    });
+  }
 
-  openCartBtn.addEventListener('click', openCart);
-  closeCartBtn.addEventListener('click', closeCart);
-  clearCartBtn.addEventListener('click', clearCart);
-  checkoutBtn.addEventListener('click', finalizeOrder);
-  checkoutBtnModal.addEventListener('click', finalizeOrder);
+  // Adicionar eventos aos botões de limpar e finalizar (se existirem)
+  if (clearCartBtn) {
+    clearCartBtn.addEventListener('click', clearCart);
+  }
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', finalizeOrder);
+  }
+  if (checkoutBtnModal) {
+    checkoutBtnModal.addEventListener('click', finalizeOrder);
+  }
 
+  // Renderizar o carrinho e sincronizar o grid
+  syncGrid();
   renderCart();
 });
 
@@ -93,13 +103,14 @@ function readItemInfo(itemEl) {
   return {
     id: itemEl.dataset.id,
     name: itemEl.querySelector('h2').textContent.trim(),
-    price: parseBRL(itemEl.querySelector('.price').textContent.trim())
+    price: parseBRL(itemEl.querySelector('.price').textContent.trim()),
+    image: itemEl.querySelector('img')?.src || '' // Adiciona a imagem do item
   };
 }
 
 // Atualiza o carrinho (adiciona ou remove item)
-function updateCart(id, name, price, delta) {
-  const current = cart.get(id) || { id, name, price, qty: 0 };
+function updateCart(id, name, price, delta, image = '') {
+  const current = cart.get(id) || { id, name, price, image, qty: 0 };
   current.qty = Math.max(0, current.qty + delta);
   current.qty === 0 ? cart.delete(id) : cart.set(id, current);
   saveCartToLocalStorage();
@@ -112,9 +123,11 @@ const getQty = (id) => cart.get(id)?.qty || 0;
 // ATUALIZAÇÃO DO GRID
 // ============================
 function syncGrid() {
-  itemsNodeList.forEach((el) => {
-    el.querySelector('.quantity').textContent = getQty(el.dataset.id);
-  });
+  if (itemsNodeList) {
+    itemsNodeList.forEach((el) => {
+      el.querySelector('.quantity').textContent = getQty(el.dataset.id);
+    });
+  }
 }
 
 // ============================
@@ -123,82 +136,86 @@ function syncGrid() {
 function renderCart() {
   let totalItems = 0, totalAmount = 0;
 
+  // Calcular totais
   cart.forEach(({ qty, price }) => {
     totalItems += qty;
     totalAmount += price * qty;
   });
 
-  cartCountEl.textContent = totalItems;
-  cartTotalEl.textContent = formatBRL(totalAmount);
-  cartTotalModalEl.textContent = formatBRL(totalAmount);
+  // Atualizar a barra fixa da sacola (index.html)
+  if (cartCountEl && cartTotalEl) {
+    cartCountEl.textContent = totalItems;
+    cartTotalEl.textContent = formatBRL(totalAmount);
+  }
 
+  // Atualizar o total na página da sacola (sacola.html)
+  if (cartTotalModalEl) {
+    cartTotalModalEl.textContent = formatBRL(totalAmount);
+  }
+
+  // Atualizar botões de checkout
   const hasItems = totalItems > 0;
-  checkoutBtn.disabled = !hasItems;
-  checkoutBtnModal.disabled = !hasItems;
-
-  cartItemsEl.innerHTML = '';
-  if (!hasItems) {
-    cartEmptyEl.classList.remove('hidden');
-    cartItemsEl.classList.add('hidden');
-    document.querySelector('.cart-modal').classList.remove('no-scroll');
-  } else {
-    cartEmptyEl.classList.add('hidden');
-    cartItemsEl.classList.remove('hidden');
-    document.querySelector('.cart-modal').classList.add('no-scroll');
+  if (checkoutBtn) {
+    checkoutBtn.disabled = !hasItems;
+  }
+  if (checkoutBtnModal) {
+    checkoutBtnModal.disabled = !hasItems;
   }
 
-  if (hasItems) {
-    cart.forEach((entry) => {
-      const row = document.createElement('div');
-      row.className = 'cart-item';
-      const totalItem = entry.price * entry.qty;
+  // Renderizar itens da sacola (sacola.html)
+  if (cartItemsEl && cartEmptyEl) {
+    cartItemsEl.innerHTML = '';
+    if (!hasItems) {
+      cartEmptyEl.classList.remove('hidden');
+      cartItemsEl.classList.add('hidden');
+    } else {
+      cartEmptyEl.classList.add('hidden');
+      cartItemsEl.classList.remove('hidden');
+      cart.forEach((entry) => {
+        const row = document.createElement('div');
+        row.className = 'cart-item';
+        const totalItem = entry.price * entry.qty;
 
-      row.innerHTML = `
-        <div>
-          <div class="item-name">${entry.name}</div>
-          <div class="item-price">${formatBRL(entry.price)} / un.</div>
-        </div>
-        <div class="cart-qty">
-          <button data-action="dec" aria-label="Diminuir">-</button>
-          <span>${entry.qty}</span>
-          <button data-action="inc" aria-label="Aumentar">+</button>
-        </div>
-        <div class="item-total">${formatBRL(totalItem)}</div>
-        <button class="cart-remove" aria-label="Remover">Remover</button>
-      `;
+        row.innerHTML = `
+          <div>
+            <img src="${entry.image}" alt="${entry.name}" style="width: 50px; height: 50px; object-fit: cover;">
+            <div class="item-name">${entry.name}</div>
+            <div class="item-price">${formatBRL(entry.price)} / un.</div>
+          </div>
+          <div class="cart-qty">
+            <button data-action="dec" aria-label="Diminuir">-</button>
+            <span>${entry.qty}</span>
+            <button data-action="inc" aria-label="Aumentar">+</button>
+          </div>
+          <div class="item-total">${formatBRL(totalItem)}</div>
+          <button class="cart-remove" aria-label="Remover">Remover</button>
+        `;
 
-      row.querySelector('[data-action="inc"]').addEventListener('click', () => {
-        updateCart(entry.id, entry.name, entry.price, 1);
-        syncGrid();
-        renderCart();
-      });
-      row.querySelector('[data-action="dec"]').addEventListener('click', () => {
-        updateCart(entry.id, entry.name, entry.price, -1);
-        syncGrid();
-        renderCart();
-      });
-      row.querySelector('.cart-remove').addEventListener('click', () => {
-        updateCart(entry.id, entry.name, entry.price, -entry.qty);
-        syncGrid();
-        renderCart();
-      });
+        row.querySelector('[data-action="inc"]').addEventListener('click', () => {
+          updateCart(entry.id, entry.name, entry.price, 1, entry.image);
+          syncGrid();
+          renderCart();
+        });
+        row.querySelector('[data-action="dec"]').addEventListener('click', () => {
+          updateCart(entry.id, entry.name, entry.price, -1, entry.image);
+          syncGrid();
+          renderCart();
+        });
+        row.querySelector('.cart-remove').addEventListener('click', () => {
+          updateCart(entry.id, entry.name, entry.price, -entry.qty, entry.image);
+          syncGrid();
+          renderCart();
+        });
 
-      cartItemsEl.appendChild(row);
-    });
+        cartItemsEl.appendChild(row);
+      });
+    }
   }
 }
 
 // ============================
-// CONTROLE DO MODAL
+// LIMPAR CARRINHO
 // ============================
-function openCart() {
-  cartModalBackdrop.classList.remove('hidden');
-  cartModalBackdrop.style.display = 'flex';
-}
-function closeCart() {
-  cartModalBackdrop.classList.add('hidden');
-  cartModalBackdrop.style.display = 'none';
-}
 function clearCart() {
   cart.clear();
   localStorage.removeItem('cart');
@@ -225,5 +242,4 @@ function finalizeOrder() {
   const message = encodeURIComponent(lines.join('\n'));
   const phone = '5537991243408';
   window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-  closeCart();
 }
