@@ -140,49 +140,52 @@ function renderCart() {
   if (!hasItems) {
     cartEmptyEl.classList.remove('hidden');
     cartItemsEl.classList.add('hidden');
-    return;
+    document.querySelector('.cart-modal').classList.remove('no-scroll');
+  } else {
+    cartEmptyEl.classList.add('hidden');
+    cartItemsEl.classList.remove('hidden');
+    document.querySelector('.cart-modal').classList.add('no-scroll');
   }
 
-  cartEmptyEl.classList.add('hidden');
-  cartItemsEl.classList.remove('hidden');
+  if (hasItems) {
+    cart.forEach((entry) => {
+      const row = document.createElement('div');
+      row.className = 'cart-item';
+      const totalItem = entry.price * entry.qty;
 
-  cart.forEach((entry) => {
-    const row = document.createElement('div');
-    row.className = 'cart-item';
-    const totalItem = entry.price * entry.qty;
+      row.innerHTML = `
+        <div>
+          <div class="item-name">${entry.name}</div>
+          <div class="item-price">${formatBRL(entry.price)} / un.</div>
+        </div>
+        <div class="cart-qty">
+          <button data-action="dec" aria-label="Diminuir">-</button>
+          <span>${entry.qty}</span>
+          <button data-action="inc" aria-label="Aumentar">+</button>
+        </div>
+        <div class="item-total">${formatBRL(totalItem)}</div>
+        <button class="cart-remove" aria-label="Remover">Remover</button>
+      `;
 
-    row.innerHTML = `
-      <div>
-        <div class="item-name">${entry.name}</div>
-        <div class="item-price">${formatBRL(entry.price)} / un.</div>
-      </div>
-      <div class="cart-qty">
-        <button data-action="dec" aria-label="Diminuir">-</button>
-        <span>${entry.qty}</span>
-        <button data-action="inc" aria-label="Aumentar">+</button>
-      </div>
-      <div class="item-total">${formatBRL(totalItem)}</div>
-      <button class="cart-remove" aria-label="Remover">Remover</button>
-    `;
+      row.querySelector('[data-action="inc"]').addEventListener('click', () => {
+        updateCart(entry.id, entry.name, entry.price, 1);
+        syncGrid();
+        renderCart();
+      });
+      row.querySelector('[data-action="dec"]').addEventListener('click', () => {
+        updateCart(entry.id, entry.name, entry.price, -1);
+        syncGrid();
+        renderCart();
+      });
+      row.querySelector('.cart-remove').addEventListener('click', () => {
+        updateCart(entry.id, entry.name, entry.price, -entry.qty);
+        syncGrid();
+        renderCart();
+      });
 
-    row.querySelector('[data-action="inc"]').addEventListener('click', () => {
-      updateCart(entry.id, entry.name, entry.price, 1);
-      syncGrid();
-      renderCart();
+      cartItemsEl.appendChild(row);
     });
-    row.querySelector('[data-action="dec"]').addEventListener('click', () => {
-      updateCart(entry.id, entry.name, entry.price, -1);
-      syncGrid();
-      renderCart();
-    });
-    row.querySelector('.cart-remove').addEventListener('click', () => {
-      updateCart(entry.id, entry.name, entry.price, -entry.qty);
-      syncGrid();
-      renderCart();
-    });
-
-    cartItemsEl.appendChild(row);
-  });
+  }
 }
 
 // ============================

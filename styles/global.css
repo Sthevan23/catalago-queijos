@@ -56,7 +56,7 @@ header p {
     padding: 20px;
 }
 
-.secao-queijos, .secao-chips {
+.secao-queijos, .secao-chips, .secao-especiais, .secao-finos, .secao-especiarias, .secao-salaminhos {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -137,16 +137,16 @@ header p {
     border-radius: 6px;
     font-size: 18px;
     cursor: pointer;
-    transition: background .2s, transform .2s; /* Mantém transform no desktop */
+    transition: background .2s, transform .2s;
 }
 
 .btn-add:hover, .btn-remove:hover {
     background: #2d1a0f;
-    transform: scale(1.1); /* Zoom no desktop */
+    transform: scale(1.1);
 }
 
 .btn-add:active, .btn-remove:active {
-    transform: scale(0.9); /* Zoom out no clique no desktop */
+    transform: scale(0.9);
 }
 
 .quantity {
@@ -189,9 +189,13 @@ header p {
     padding: 16px;
     width: min(720px, 92vw);
     max-height: 80vh;
-    overflow: auto;
+    overflow: auto; /* Padrão com scroll */
     box-shadow: 0 10px 30px rgba(0,0,0,.2);
     animation: fadeIn .3s ease;
+}
+
+.cart-modal.no-scroll {
+    overflow: hidden; /* Remove scroll quando há itens */
 }
 
 .cart-modal {
@@ -302,12 +306,16 @@ header p {
 }
 
 .btn-secondary {
-    background: #eee;
-    color: #111;
+    background: var(--brand-light);
+    color: #fff;
     border: none;
     padding: 10px 14px;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: #3B2416;
 }
 
 footer {
@@ -322,9 +330,28 @@ footer {
     display: none !important;
 }
 
+#cartTitle {
+    color: #1a8917; /* Cor de "Sua Sacola" */
+    font: var(--h1); /* Mantém tamanho e estilo */
+    text-align: center;
+    padding: 10px;
+}
+
+#cartEmpty {
+    color: #B71C1C; /* Cor da mensagem "Sua sacola está vazia" */
+    font: var(--text-sm);
+    text-align: center;
+    padding: 10px;
+}
+
+.cart-footer strong, #cartTotalModal {
+    color: var(--text-secondary); /* Cor do "Total do pedido" e valor */
+    font: var(--text-sm);
+}
+
 @media (max-width: 768px) {
     .itens-grid {
-        grid-template-columns: repeat(2, 1fr); /* Força 2 colunas no mobile */
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .item {
@@ -345,19 +372,17 @@ footer {
     }
 
     .btn-add, .btn-remove {
-        width: 28px; /* Tamanho maior no mobile */
+        width: 28px;
         height: 28px;
         font-size: 14px;
-        transition: background .2s; /* Remove transform no mobile */
+        transition: background .2s;
     }
 
     .btn-add:hover, .btn-remove:hover {
         background: #2d1a0f;
-        /* Sem transform: scale no mobile */
     }
 
     .btn-add:active, .btn-remove:active {
-        /* Sem transform: scale no mobile */
     }
 
     header h1 {
