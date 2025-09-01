@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Quando usuário clica em "+" ou "-", atualiza o carrinho
 function handleQtyChange(itemEl, delta, span) {
   const info = readItemInfo(itemEl);
-  updateCart(info.id, info.name, info.price, delta);
+  updateCart(info.id, info.name, info.price, delta, info.image);
   span.textContent = getQty(info.id);
   saveCartToLocalStorage();
   renderCart();
@@ -100,16 +100,17 @@ function handleQtyChange(itemEl, delta, span) {
 
 // Lê informações de um produto no HTML
 function readItemInfo(itemEl) {
+  const img = itemEl.querySelector('img');
   return {
     id: itemEl.dataset.id,
     name: itemEl.querySelector('h2').textContent.trim(),
     price: parseBRL(itemEl.querySelector('.price').textContent.trim()),
-    image: itemEl.querySelector('img')?.src || '' // Adiciona a imagem do item
+    image: img ? img.src : 'assets/imagens/placeholder.png' // Fallback para imagem padrão
   };
 }
 
 // Atualiza o carrinho (adiciona ou remove item)
-function updateCart(id, name, price, delta, image = '') {
+function updateCart(id, name, price, delta, image) {
   const current = cart.get(id) || { id, name, price, image, qty: 0 };
   current.qty = Math.max(0, current.qty + delta);
   current.qty === 0 ? cart.delete(id) : cart.set(id, current);
@@ -176,9 +177,12 @@ function renderCart() {
         row.className = 'cart-item';
         const totalItem = entry.price * entry.qty;
 
+        // Usar a imagem armazenada ou um placeholder se não houver imagem
+        const imageSrc = entry.image || 'assets/imagens/placeholder.png';
+
         row.innerHTML = `
           <div>
-            <img src="${entry.image}" alt="${entry.name}" style="width: 50px; height: 50px; object-fit: cover;">
+            <img src="${imageSrc}" alt="${entry.name}" style="width: 50px; height: 50px; object-fit: cover;">
             <div class="item-name">${entry.name}</div>
             <div class="item-price">${formatBRL(entry.price)} / un.</div>
           </div>
