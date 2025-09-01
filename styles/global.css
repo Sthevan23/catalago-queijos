@@ -5,12 +5,12 @@
     --stroke: #F2E6D8;
     --text-primary: #3B2B20;
     --text-secondary: #7D6651;
-    --font-title: 'Poppins', sans-serif; /* Nova fonte para títulos */
+    --font-title: 'Poppins', sans-serif;
     --font-body: 'Roboto', sans-serif;
-    --h1: 700 24px/135% var(--font-title); /* Mantido reduzido */
-    --h2: 600 14px/140% var(--font-title); /* Mantido reduzido */
-    --text: 400 12px/140% var(--font-body); /* Mantido reduzido */
-    --text-sm: 500 14px/150% var(--font-body); /* Mantido reduzido */
+    --h1: 700 24px/135% var(--font-title);
+    --h2: 600 14px/140% var(--font-title);
+    --text: 400 12px/140% var(--font-body);
+    --text-sm: 500 14px/150% var(--font-body);
 }
 
 * {
@@ -118,7 +118,7 @@ header p {
 }
 
 .item .price {
-    font: 700 14px/1.4 var(--font-body); /* Reduzido de 16px */
+    font: 700 14px/1.4 var(--font-body);
     color: var(--brand-light);
 }
 
@@ -132,10 +132,10 @@ header p {
     background: var(--brand-dark);
     color: #fff;
     border: none;
-    width: 32px; /* Reduzido de 38px */
-    height: 32px; /* Reduzido de 38px */
+    width: 32px;
+    height: 32px;
     border-radius: 6px;
-    font-size: 16px; /* Reduzido de 18px */
+    font-size: 16px;
     cursor: pointer;
     transition: background .2s, transform .2s;
 }
@@ -322,22 +322,39 @@ footer {
     display: none !important;
 }
 
-@media (max-width: 480px) {
-    header h1 {
-        font-size: 16px; /* Ajustado para boa visualização */
+@media (max-width: 768px) {
+    .itens-grid {
+        grid-template-columns: repeat(2, 1fr); /* Força 2 colunas no mobile */
+    }
+
+    .item {
+        padding: 8px;
+        gap: 6px;
     }
 
     .item img {
-        height: 80px; /* Reduzido para proporção */
+        height: 100px;
+    }
+
+    .item h2 {
+        font-size: 12px;
+    }
+
+    .item .details, .item .price {
+        font-size: 11px;
     }
 
     .btn-add, .btn-remove {
-        width: 24px; /* Reduzido para celular tava20*/
-        height: 24px; /* Reduzido para celular */
-        font-size: 14px; /* Reduzido para legibilidade tava 14*/
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+    }
+
+    header h1 {
+        font-size: 16px;
     }
 
     .item-total {
-        min-width: 60px; /* Ajustado para celular */
+        min-width: 60px;
     }
 }
