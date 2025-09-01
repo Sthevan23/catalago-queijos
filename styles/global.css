@@ -380,14 +380,14 @@ footer {
     }
 
     .btn-group {
-        gap: 16px; /* Aumentado o espaçamento entre os botões */
+        gap: 20px; /* Aumentado o espaçamento entre os botões */
     }
 
     .btn-add,
     .btn-remove {
-        width: 36px; /* Aumentado o tamanho dos botões */
-        height: 36px; /* Aumentado o tamanho dos botões */
-        font-size: 18px; /* Aumentado o tamanho da fonte */
+        width: 40px; /* Aumentado o tamanho dos botões */
+        height: 40px; /* Aumentado o tamanho dos botões */
+        font-size: 18px; /* Tamanho da fonte mantido para visibilidade */
         transition: background 0.2s;
     }
 
